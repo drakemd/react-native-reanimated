@@ -1,4 +1,4 @@
-import AnimatedValue from '../core/InternalAnimatedValue';
+import AnimatedValue from '../core/AnimatedValue';
 import timing from './timing';
 import { block, clockRunning, startClock, stopClock, cond } from '../base';
 import Clock from '../core/AnimatedClock';

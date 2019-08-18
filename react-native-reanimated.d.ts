@@ -12,7 +12,6 @@ declare module 'react-native-reanimated' {
     ViewStyle,
     TextStyle,
     ImageStyle,
-    TransformsStyle
   } from 'react-native';
   namespace Animated {
     class AnimatedNode<T> {
@@ -60,16 +59,16 @@ declare module 'react-native-reanimated' {
       | T
       | AnimatedNode<T>
       | ReadonlyArray<T | AnimatedNode<T> | ReadonlyArray<T | AnimatedNode<T>>>;
-    type BinaryOperator<T = number> = (
+    type BinaryOperator = (
       left: Adaptable<number>,
       right: Adaptable<number>
-    ) => AnimatedNode<T>;
+    ) => AnimatedNode<number>;
     type UnaryOperator = (value: Adaptable<number>) => AnimatedNode<number>;
-    type MultiOperator<T = number> = (
+    type MultiOperator = (
       a: Adaptable<number>,
       b: Adaptable<number>,
       ...others: Adaptable<number>[]
-    ) => AnimatedNode<T>;
+    ) => AnimatedNode<number>;
 
     export interface DecayState {
       finished: AnimatedValue<number>;
@@ -102,7 +101,6 @@ declare module 'react-native-reanimated' {
       finished: AnimatedValue<number>;
       velocity: AnimatedValue<number>;
       position: AnimatedValue<number>;
-      prevPosition?: AnimatedValue<number>;
       time: AnimatedValue<number>;
     }
     export interface SpringConfig {
@@ -115,38 +113,8 @@ declare module 'react-native-reanimated' {
       toValue: Adaptable<number>;
     }
 
-    interface SpringConfigWithOrigamiTensionAndFriction {
-      tension: Adaptable<number>;
-      mass: Adaptable<number>;
-      friction: Adaptable<number>;
-      overshootClamping: Adaptable<number> | boolean;
-      restSpeedThreshold: Adaptable<number>;
-      restDisplacementThreshold: Adaptable<number>;
-      toValue: Adaptable<number>;
-    }
-
-    interface SpringConfigWithBouncinessAndSpeed {
-      bounciness: Adaptable<number>;
-      mass: Adaptable<number>;
-      speed: Adaptable<number>;
-      overshootClamping: Adaptable<number> | boolean;
-      restSpeedThreshold: Adaptable<number>;
-      restDisplacementThreshold: Adaptable<number>;
-      toValue: Adaptable<number>;
-    }
-
-    type SpringUtils =  {
-      makeDefaultConfig: () => SpringConfig;
-      makeConfigFromBouncinessAndSpeed: (prevConfig: SpringConfigWithBouncinessAndSpeed) => SpringConfig;
-      makeConfigFromOrigamiTensionAndFriction: (prevConfig: SpringConfigWithOrigamiTensionAndFriction) => SpringConfig
-    }
-
-    export const SpringUtils: SpringUtils
-
-    type AnimatedTransform = { [P in keyof TransformsStyle["transform"]]: Animated.Adaptable<TransformsStyle["transform"][P]> };
-
     type AnimateStyle<S extends object> = {
-      [K in keyof S]: K extends 'transform' ? AnimatedTransform : (S[K] extends ReadonlyArray<any>
+      [K in keyof S]: S[K] extends ReadonlyArray<any>
         ? ReadonlyArray<AnimateStyle<S[K][0]>>
         : S[K] extends object
           ? AnimateStyle<S[K]>
@@ -154,8 +122,8 @@ declare module 'react-native-reanimated' {
               | S[K]
               | AnimatedNode<
                   // allow `number` where `string` normally is to support colors
-                  S[K] extends (string | undefined) ? S[K] | number : S[K]
-                >)
+                  S[K] extends string ? S[K] | number : S[K]
+                >
     };
 
     type AnimateProps<
@@ -199,7 +167,6 @@ declare module 'react-native-reanimated' {
     export const pow: MultiOperator;
     export const modulo: MultiOperator;
     export const sqrt: UnaryOperator;
-    export const log: UnaryOperator;
     export const sin: UnaryOperator;
     export const cos: UnaryOperator;
     export const tan: UnaryOperator;
@@ -210,17 +177,14 @@ declare module 'react-native-reanimated' {
     export const round: UnaryOperator;
     export const floor: UnaryOperator;
     export const ceil: UnaryOperator;
-    export const lessThan: BinaryOperator<0 | 1>;
-    export const eq: BinaryOperator<0 | 1>;
-    export const greaterThan: BinaryOperator<0 | 1>;
-    export const lessOrEq: BinaryOperator<0 | 1>;
-    export const greaterOrEq: BinaryOperator<0 | 1>;
-    export const neq: BinaryOperator<0 | 1>;
-    export const and: MultiOperator<0 | 1>;
-    export const or: MultiOperator<0 | 1>;
-    export function proc(
-      cb: (...params: Array<Animated.Value<number>>) => Adaptable<number>
-    ): (...args: Array<Adaptable<number>>) => AnimatedNode<number>;
+    export const lessThan: BinaryOperator;
+    export const eq: BinaryOperator;
+    export const greaterThan: BinaryOperator;
+    export const lessOrEq: BinaryOperator;
+    export const greaterOrEq: BinaryOperator;
+    export const neq: BinaryOperator;
+    export const and: MultiOperator;
+    export const or: MultiOperator;
     export function defined(value: Adaptable<any>): AnimatedNode<0 | 1>;
     export function not(value: Adaptable<any>): AnimatedNode<0 | 1>;
     export function set(
@@ -228,13 +192,15 @@ declare module 'react-native-reanimated' {
       sourceNode: Adaptable<number>,
     ): AnimatedNode<number>;
     export function concat(
-      ...args: Array<Adaptable<string> | Adaptable<number>>,
+      a: AnimatedNode<string>,
+      b: AnimatedNode<string>,
+      ...others: AnimatedNode<string>[],
     ): AnimatedNode<string>;
-    export function cond<T extends Value = number>(
+    export function cond(
       conditionNode: Adaptable<number>,
-      ifNode: Adaptable<T>,
-      elseNode?: Adaptable<T>,
-    ): AnimatedNode<T>;
+      ifNode: Adaptable<number>,
+      elseNode?: Adaptable<number>,
+    ): AnimatedNode<number>;
     export function block<T>(
       items: ReadonlyArray<Adaptable<T>>,
     ): AnimatedNode<T>;

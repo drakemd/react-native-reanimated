@@ -1,8 +1,7 @@
-import { val } from '../val';
+import { val } from '../utils';
 import AnimatedNode from './AnimatedNode';
-import { adapt } from '../core/AnimatedBlock';
 
-class AnimatedCond extends AnimatedNode {
+export default class AnimatedCond extends AnimatedNode {
   _condition;
   _ifBlock;
   _elseBlock;
@@ -29,12 +28,4 @@ class AnimatedCond extends AnimatedNode {
       return this._elseBlock !== undefined ? val(this._elseBlock) : undefined;
     }
   }
-}
-
-export function createAnimatedCond(cond, ifBlock, elseBlock) {
-  return new AnimatedCond(
-    adapt(cond),
-    adapt(ifBlock),
-    elseBlock === undefined ? undefined : adapt(elseBlock)
-  );
 }

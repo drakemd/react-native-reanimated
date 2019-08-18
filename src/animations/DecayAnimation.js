@@ -3,7 +3,7 @@ import Animation from './Animation';
 import decay from './decay';
 import { block, clockRunning, startClock, stopClock, cond } from '../base';
 import Clock from '../core/AnimatedClock';
-import AnimatedValue from '../core/InternalAnimatedValue';
+import AnimatedValue from '../core/AnimatedValue';
 
 class DecayAnimation extends Animation {
   constructor(config) {

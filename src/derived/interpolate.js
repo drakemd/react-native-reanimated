@@ -1,13 +1,12 @@
 import {
+  cond,
   lessThan,
   multiply,
   sub,
   add,
   divide,
   greaterThan,
-} from '../operators';
-
-import { createAnimatedCond as cond } from '../core/AnimatedCond';
+} from '../base';
 import invariant from 'fbjs/lib/invariant';
 import AnimatedNode from '../core/AnimatedNode';
 

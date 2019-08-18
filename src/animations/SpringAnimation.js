@@ -1,4 +1,4 @@
-import AnimatedValue from '../core/InternalAnimatedValue';
+import AnimatedValue from '../core/AnimatedValue';
 import Animation from './Animation';
 import SpringConfig from '../SpringConfig';
 import spring from './spring';

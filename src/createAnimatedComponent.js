@@ -26,11 +26,6 @@ export default function createAnimatedComponent(Component) {
   class AnimatedComponent extends React.Component {
     _invokeAnimatedPropsCallbackOnMount = false;
 
-    constructor(props) {
-      super(props);
-      this._attachProps(this.props);
-    }
-  
     componentWillUnmount() {
       this._detachPropUpdater();
       this._propsAnimated && this._propsAnimated.__detach();
@@ -39,6 +34,10 @@ export default function createAnimatedComponent(Component) {
 
     setNativeProps(props) {
       this._component.setNativeProps(props);
+    }
+
+    componentWillMount() {
+      this._attachProps(this.props);
     }
 
     componentDidMount() {

@@ -2,7 +2,7 @@ import AnimatedNode from './AnimatedNode';
 import AnimatedClock from './AnimatedClock';
 import invariant from 'fbjs/lib/invariant';
 
-class AnimatedStartClock extends AnimatedNode {
+export default class AnimatedStartClock extends AnimatedNode {
   _clockNode;
 
   constructor(clockNode) {
@@ -18,8 +18,4 @@ class AnimatedStartClock extends AnimatedNode {
     this._clockNode.start();
     return 0;
   }
-}
-
-export function createAnimatedStartClock(clock) {
-  return new AnimatedStartClock(clock);
 }

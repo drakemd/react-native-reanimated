@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAnimatedAlways } from './AnimatedAlways';
+import AnimatedAlways from './AnimatedAlways';
 import AnimatedNode from './AnimatedNode';
 
 class Code extends React.Component {
@@ -33,7 +33,7 @@ class Code extends React.Component {
       );
     }
 
-    this.always = createAnimatedAlways(nodeExec || nodeChildren);
+    this.always = new AnimatedAlways(nodeExec || nodeChildren);
     this.always.__attach();
   }
 

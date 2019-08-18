@@ -2,8 +2,8 @@ import { findNodeHandle } from 'react-native';
 import ReanimatedModule from '../ReanimatedModule';
 
 import AnimatedNode from './AnimatedNode';
-import InternalAnimatedValue from './AnimatedValue';
-import { createAnimatedAlways } from './AnimatedAlways';
+import AnimatedValue from './AnimatedValue';
+import AnimatedAlways from './AnimatedAlways';
 
 import invariant from 'fbjs/lib/invariant';
 import createEventObjectProxyPolyfill from './createEventObjectProxyPolyfill';
@@ -15,13 +15,13 @@ function sanitizeArgMapping(argMapping) {
   const alwaysNodes = [];
 
   const traverse = (value, path) => {
-    if (value instanceof InternalAnimatedValue) {
+    if (value instanceof AnimatedValue) {
       eventMappings.push(path.concat(value.__nodeID));
     } else if (typeof value === 'object' && value.__val) {
       eventMappings.push(path.concat(value.__val.__nodeID));
     } else if (typeof value === 'function') {
-      const node = new InternalAnimatedValue(0);
-      alwaysNodes.push(createAnimatedAlways(value(node)));
+      const node = new AnimatedValue(0);
+      alwaysNodes.push(new AnimatedAlways(value(node)));
       eventMappings.push(path.concat(node.__nodeID));
     } else if (typeof value === 'object') {
       for (const key in value) {
@@ -61,7 +61,7 @@ function sanitizeArgMapping(argMapping) {
       typeof Proxy === 'function'
         ? new Proxy({}, proxyHandler)
         : createEventObjectProxyPolyfill();
-    alwaysNodes.push(createAnimatedAlways(ev(proxy)));
+    alwaysNodes.push(new AnimatedAlways(ev(proxy)));
     traverse(proxy, []);
   }
 
@@ -98,8 +98,4 @@ export default class AnimatedEvent extends AnimatedNode {
     ReanimatedModule.detachEvent(viewTag, eventName, this.__nodeID);
     this.__detach();
   }
-}
-
-export function createAnimatedEvent(argMapping, config) {
-  return new AnimatedEvent(argMapping, config);
 }
